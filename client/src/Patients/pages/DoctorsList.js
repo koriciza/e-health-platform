@@ -18,8 +18,33 @@ import Doctor_8 from "../../css/assets/img/doctors/doctor_8.jpg";
 import Doctor_9 from "../../css/assets/img/doctors/doctor_9.jpg";
 
 import { Container, Stack, Typography } from '@mui/material';
+import ReviewsIcon from '@mui/icons-material/Reviews';
+import GradeIcon from '@mui/icons-material/Grade';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+
+import TextField from '@mui/material/TextField';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
 import Page from '../../components/Page';
 import { ProductSort,  ProductFilterSidebar } from '../../sections/@dashboard/products';
+
+
+const style = {
+  position: 'absolute',
+  top: '25%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
 
 const DoctorsList=()=> {
 
@@ -32,6 +57,11 @@ const DoctorsList=()=> {
   const handleCloseFilter = () => {
     setOpenFilter(false);
   };
+
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
    
@@ -80,14 +110,14 @@ const DoctorsList=()=> {
                   <span className="text-sm text-white badge badge-danger">Cardiology</span>
                   <div>
                     <div>
-                  <p className="text-md text-start mb-0"><span>Experience :</span><span>6 years</span></p>
-                  <p className="text-md text-start mb-0">Price :<span>12000 fbu</span></p>
-                  <p className="text-md text-start mb-0">Availability :<span>Monday</span> to <span>Sunday</span></p>
-                  <p className="text-md mb-0"><span>view profile</span></p>
-                  <p className="text-md mb-0">Rate :<span>12000 fbu</span></p>
-                  <p className="text-md mb-0">Reviews :<span>12000 fbu</span></p>
+                  <p className="text-md text-start mb-0"><span>Experience :</span><span >6 years</span></p>
+                  <p className="text-md text-start mb-0">Price :<strong>12000 fbu</strong></p>
+                  <p className="text-md text-start mb-0">Availability :<span>Mon</span> to <span>Sun</span></p>
+                  <p className="text-md text-start mb-0"><span style={{alignItems:"center"}} ><GradeIcon style={{color:"yellow"}}/><span>120</span></span>&nbsp;&nbsp;&nbsp;<ReviewsIcon /><span>120</span> </p>
+                  
                  </div>
-                  <input type='button' class='btn btn-primary' value='Book here'/>
+                 <p className="text-md text-center mb-0"><span><a href='#' className="text-sm text-white badge badge-primary" >view profile</a></span></p>
+                  <input type='button' class='btn btn-primary' onClick={handleOpen} value='Book here'/>
                   </div>
                  
                 </div>
@@ -230,8 +260,60 @@ const DoctorsList=()=> {
   </div> 
   </Container>
     </Page> 
-          
+
+{/* ############################################### MODAL ####################################### */}
+
+<div>
+      {/* <Button onClick={handleOpen}>Open modal</Button> */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Rendez-vous
+          </Typography>
+          <MaterialUIPickers/>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography>
+        </Box>
+      </Modal>
+    </div>
+         
            </>
   )
 }
+
+
+ {/* Date picker */}
+
+ function MaterialUIPickers() {
+
+  const [value, setValue] = React.useState(new Date('2014-08-18T21:11:54'));
+
+  const handleChange = (newValue) => {
+    setValue(newValue);
+  };
+
+  return (
+    <>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Stack spacing={3}>
+        <DesktopDatePicker
+          label="Date desktop"
+          inputFormat="MM/dd/yyyy"
+          value={value}
+          onChange={handleChange}
+          renderInput={(params) => <TextField {...params} />}
+        />
+      </Stack>
+    </LocalizationProvider>
+    
+    </>
+  );
+}
+    
 export default  DoctorsList;
